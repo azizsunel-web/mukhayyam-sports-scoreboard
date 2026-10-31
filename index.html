@@ -40,9 +40,123 @@ if (FAQ_ENABLED) {
   ).join('') || '<div class="empty">FAQ content will be added soon.</div>';
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
-// AUTOMATIC HERO BANNER GALLERY - SMOOTH FADE
+
+// AUTOMATIC HERO GALLERY - CINEMATIC TRANSITIONS
 (async function () {
   const hero = document.querySelector('.hero');
+
+  const folderAPI =
+    'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
+
+  try {
+    const response = await fetch(folderAPI);
+    if (!response.ok) throw new Error('Gallery unavailable');
+
+    const files = await response.json();
+
+    const photos = files
+      .filter(file =>
+        file.type === 'file' &&
+        /\.(jpg|jpeg|png|webp)$/i.test(file.name)
+      )
+      .sort((a, b) => a.name.localeCompare(
+        b.name, undefined, { numeric: true }
+      ))
+      .map(file => file.download_url);
+
+    if (!photos.length) return;
+
+    hero.style.position = 'relative';
+    hero.style.isolation = 'isolate';
+    hero.style.overflow = 'hidden';
+    hero.style.backgroundImage = 'none';
+
+    hero.querySelectorAll(':scope > *').forEach(element => {
+      element.style.position = 'relative';
+      element.style.zIndex = '2';
+    });
+
+    const layers = [0, 1].map(() => {
+      const layer = document.createElement('div');
+      layer.className = 'hero-gallery-layer';
+      layer.style.zIndex = '0';
+      layer.style.backgroundImage =
+        'linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25))';
+      hero.prepend(layer);
+      return layer;
+    });
+
+    // Preload photos
+    photos.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+
+    const transitions = ['fade', 'fly', 'zoom', 'paint'];
+    let current = 0;
+    let activeLayer = 0;
+
+    function showPhoto() {
+      const nextLayer = 1 - activeLayer;
+      const nextPhoto = photos[current];
+      const transition =
+        transitions[current % transitions.length];
+
+      const incoming = layers[nextLayer];
+      const outgoing = layers[activeLayer];
+
+      incoming.style.transition = 'none';
+      incoming.style.clipPath = 'none';
+      incoming.style.transform = 'none';
+      incoming.style.opacity = '0';
+
+      incoming.style.backgroundImage =
+        `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${nextPhoto}")`;
+
+      if (transition === 'fly') {
+        incoming.style.transform = 'translateX(8%)';
+      }
+
+      if (transition === 'zoom') {
+        incoming.style.transform = 'scale(1.12)';
+      }
+
+      if (transition === 'paint') {
+        incoming.style.clipPath =
+          'inset(0 100% 0 0)';
+      }
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          incoming.style.transition =
+            'opacity 1.3s ease, transform 1.3s ease, clip-path 1.3s ease';
+
+          incoming.style.opacity = '1';
+          incoming.style.transform = 'translateX(0) scale(1)';
+          incoming.style.clipPath = 'inset(0 0 0 0)';
+          outgoing.style.opacity = '0';
+        });
+      });
+
+      activeLayer = nextLayer;
+      current = (current + 1) % photos.length;
+    }
+
+    layers[0].style.backgroundImage =
+      `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[0]}")`;
+
+    layers[0].classList.add('active');
+    layers[0].style.opacity = '1';
+
+    current = 1 % photos.length;
+
+    setInterval(showPhoto, 100000);
+
+  } catch (error) {
+    console.error('Gallery error:', error);
+  }
+})();
+
 
   const folderAPI =
     'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
