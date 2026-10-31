@@ -26,4 +26,45 @@ if (FAQ_ENABLED) {
   ).join('') || '<div class="empty">FAQ content will be added soon.</div>';
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
+// AUTOMATIC HERO BANNER GALLERY
+(async function () {
+  const hero = document.querySelector('.hero');
+
+  const folderAPI =
+    'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
+
+  try {
+    const response = await fetch(folderAPI);
+    if (!response.ok) throw new Error('Could not load gallery');
+
+    const files = await response.json();
+
+    const photos = files
+      .filter(file =>
+        file.type === 'file' &&
+        /\.(jpg|jpeg|png|webp)$/i.test(file.name)
+      )
+      .sort((a, b) => a.name.localeCompare(
+        b.name, undefined, { numeric: true }
+      ))
+      .map(file => file.download_url);
+
+    if (!photos.length) return;
+
+    let current = 0;
+
+    function showPhoto() {
+      hero.style.backgroundImage =
+        `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[current]}")`;
+
+      current = (current + 1) % photos.length;
+    }
+
+    showPhoto();
+    setInterval(showPhoto, 2500);
+
+  } catch (error) {
+    console.error('Gallery error:', error);
+  }
+})();
 </script></body></html>
