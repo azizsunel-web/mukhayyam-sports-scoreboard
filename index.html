@@ -41,19 +41,19 @@ if (FAQ_ENABLED) {
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
 
-// AUTOMATIC HERO GALLERY - CINEMATIC TRANSITIONS
+// AUTOMATIC HERO GALLERY - LOOPING CINEMATIC TRANSITIONS
 (async function () {
   const hero = document.querySelector('.hero');
+  if (!hero) return;
 
   const folderAPI =
     'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
 
   try {
     const response = await fetch(folderAPI);
-    if (!response.ok) throw new Error('Gallery unavailable');
+    if (!response.ok) throw new Error('Gallery folder could not be loaded');
 
     const files = await response.json();
-
     const photos = files
       .filter(file =>
         file.type === 'file' &&
@@ -64,204 +64,104 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelect
       ))
       .map(file => file.download_url);
 
-    if (!photos.length) return;
+    if (!photos.length) {
+      console.warn('No supported photos found in the gallery folder.');
+      return;
+    }
 
+    // Keep the original hero content above the slideshow.
     hero.style.position = 'relative';
     hero.style.isolation = 'isolate';
     hero.style.overflow = 'hidden';
     hero.style.backgroundImage = 'none';
 
-    hero.querySelectorAll(':scope > *').forEach(element => {
+    hero.querySelectorAll(':scope > div').forEach(element => {
       element.style.position = 'relative';
       element.style.zIndex = '2';
     });
 
+    // Two layers allow the next photo to animate over the current photo.
     const layers = [0, 1].map(() => {
       const layer = document.createElement('div');
       layer.className = 'hero-gallery-layer';
+      layer.style.position = 'absolute';
+      layer.style.inset = '0';
       layer.style.zIndex = '0';
-      layer.style.backgroundImage =
-        'linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25))';
+      layer.style.opacity = '0';
+      layer.style.pointerEvents = 'none';
+      layer.style.backgroundSize = 'cover';
+      layer.style.backgroundPosition = 'center 55%';
       hero.prepend(layer);
       return layer;
     });
 
-    // Preload photos
+    const overlay =
+      'linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25))';
+
+    // Preload all photos to reduce blank frames during transitions.
     photos.forEach(src => {
-      const img = new Image();
-      img.src = src;
+      const image = new Image();
+      image.src = src;
     });
 
     const transitions = ['fade', 'fly', 'zoom', 'paint'];
     let current = 0;
     let activeLayer = 0;
 
-    function showPhoto() {
-      const nextLayer = 1 - activeLayer;
-      const nextPhoto = photos[current];
-      const transition =
-        transitions[current % transitions.length];
-
-      const incoming = layers[nextLayer];
-      const outgoing = layers[activeLayer];
-
-      incoming.style.transition = 'none';
-      incoming.style.clipPath = 'none';
-      incoming.style.transform = 'none';
-      incoming.style.opacity = '0';
-
-      incoming.style.backgroundImage =
-        `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${nextPhoto}")`;
-
-      if (transition === 'fly') {
-        incoming.style.transform = 'translateX(8%)';
-      }
-
-      if (transition === 'zoom') {
-        incoming.style.transform = 'scale(1.12)';
-      }
-
-      if (transition === 'paint') {
-        incoming.style.clipPath =
-          'inset(0 100% 0 0)';
-      }
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          incoming.style.transition =
-            'opacity 1.3s ease, transform 1.3s ease, clip-path 1.3s ease';
-
-          incoming.style.opacity = '1';
-          incoming.style.transform = 'translateX(0) scale(1)';
-          incoming.style.clipPath = 'inset(0 0 0 0)';
-          outgoing.style.opacity = '0';
-        });
-      });
-
-      activeLayer = nextLayer;
-      current = (current + 1) % photos.length;
-    }
-
     layers[0].style.backgroundImage =
-      `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[0]}")`;
-
-    layers[0].classList.add('active');
+      `${overlay}, url("${photos[0]}")`;
     layers[0].style.opacity = '1';
 
     current = 1 % photos.length;
 
-    setInterval(showPhoto, 100000);
-
-  } catch (error) {
-    console.error('Gallery error:', error);
-  }
-})();
-
-
-  const folderAPI =
-    'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
-
-  try {
-    const response = await fetch(folderAPI);
-    if (!response.ok) throw new Error('Could not load gallery');
-
-    const files = await response.json();
-
-    const photos = files
-      .filter(file =>
-        file.type === 'file' &&
-        /\.(jpg|jpeg|png|webp)$/i.test(file.name)
-      )
-      .sort((a, b) => a.name.localeCompare(
-        b.name, undefined, { numeric: true }
-      ))
-      .map(file => file.download_url);
-
-    if (!photos.length) return;
-
-    hero.style.position = 'relative';
-    hero.style.isolation = 'isolate';
-    hero.style.overflow = 'hidden';
-    hero.style.backgroundImage = 'none';
-
-    hero.querySelectorAll(':scope > *').forEach(element => {
-      element.style.position = 'relative';
-      element.style.zIndex = '2';
-    });
-
-    const layers = [0, 1].map(() => {
-      const layer = document.createElement('div');
-      layer.className = 'hero-gallery-layer';
-      layer.style.backgroundImage =
-        'linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25))';
-      hero.prepend(layer);
-      return layer;
-    });
-
-    let current = 0;
-    let activeLayer = 0;
-
     function showPhoto() {
-      const nextLayer = 1 - activeLayer;
+      if (photos.length < 2) return;
 
-      layers[nextLayer].style.backgroundImage =
-        `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[current]}")`;
+      const incomingIndex = 1 - activeLayer;
+      const incoming = layers[incomingIndex];
+      const outgoing = layers[activeLayer];
+      const transition = transitions[current % transitions.length];
 
-      layers[nextLayer].classList.add('active');
-      layers[activeLayer].classList.remove('active');
+      // Reset the incoming layer before starting its next animation.
+      incoming.style.transition = 'none';
+      incoming.style.opacity = '0';
+      incoming.style.transform = 'none';
+      incoming.style.clipPath = 'none';
+      incoming.style.backgroundImage =
+        `${overlay}, url("${photos[current]}")`;
 
-      activeLayer = nextLayer;
+      if (transition === 'fly') {
+        incoming.style.transform = 'translateX(7%)';
+      } else if (transition === 'zoom') {
+        incoming.style.transform = 'scale(1.12)';
+      } else if (transition === 'paint') {
+        incoming.style.clipPath = 'inset(0 100% 0 0)';
+      }
+
+      // Force the browser to apply the reset before animating.
+      void incoming.offsetWidth;
+
+      incoming.style.transition =
+        'opacity 1.4s ease, transform 1.4s ease, clip-path 1.4s ease';
+      incoming.style.opacity = '1';
+      incoming.style.transform = 'translateX(0) scale(1)';
+      incoming.style.clipPath = 'inset(0 0 0 0)';
+
+      outgoing.style.transition = 'opacity 1.4s ease';
+      outgoing.style.opacity = '0';
+
+      activeLayer = incomingIndex;
       current = (current + 1) % photos.length;
     }
 
-    layers[0].style.backgroundImage =
-      `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[0]}")`;
-
-    layers[0].classList.add('active');
-    current = 1 % photos.length;
-
-    setInterval(showPhoto, 10000);
-
-  } catch (error) {
-    console.error('Gallery error:', error);
-  }
-})();
-
-  const folderAPI =
-    'https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/gallery?ref=main';
-
-  try {
-    const response = await fetch(folderAPI);
-    if (!response.ok) throw new Error('Could not load gallery');
-
-    const files = await response.json();
-
-    const photos = files
-      .filter(file =>
-        file.type === 'file' &&
-        /\.(jpg|jpeg|png|webp)$/i.test(file.name)
-      )
-      .sort((a, b) => a.name.localeCompare(
-        b.name, undefined, { numeric: true }
-      ))
-      .map(file => file.download_url);
-
-    if (!photos.length) return;
-
-    let current = 0;
-
-    function showPhoto() {
-      hero.style.backgroundImage =
-        `linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url("${photos[current]}")`;
-
-      current = (current + 1) % photos.length;
+    // Change photo every 10 seconds and repeat from the first photo forever.
+    if (photos.length > 1) {
+      window.setInterval(showPhoto, 10000);
     }
 
-    showPhoto();
-    setInterval(showPhoto, 100000);
-
   } catch (error) {
-    console.error('Gallery error:', error);
+    console.error('Hero gallery error:', error);
+    // If the gallery cannot load, the original hero background remains available.
   }
 })();
 </script></body></html>
