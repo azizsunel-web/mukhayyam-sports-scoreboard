@@ -146,7 +146,12 @@ function render(){
   let q=$('search').value.trim().toLowerCase(),rows=[],heads=[],title='';
   if(view==='students'){
     title='Student Leaderboard';heads=['Rank','Student Name','House / Team','Total Points'];
-    rows=data.students.filter(s=>!['RED','GREEN','BLUE'].includes(teamKey(s.name)) && (s.name+' '+s.house).toLowerCase().includes(q)).map((s,i)=>`<tr><td>${medal(Number(s.rank)||i+1)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
+    const visibleStudents=data.students
+      .filter(s=>!['RED','GREEN','BLUE'].includes(teamKey(s.name)))
+      .map((s,i)=>({...s,displayRank:i+1}));
+    rows=visibleStudents
+      .filter(s=>(s.name+' '+s.house).toLowerCase().includes(q))
+      .map(s=>`<tr><td>${medal(s.displayRank)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
   }else if(view==='houses'){
     title='House Standings';heads=['Rank','House / Team','Students','Total Points'];
     rows=data.houses.filter(h=>h.name.toLowerCase().includes(q)).map((h,i)=>`<tr><td>${medal(Number(h.rank)||i+1)}</td><td class="name">${esc(h.name)}</td><td>${h.students}</td><td class="points">${Number(h.points)||0}</td></tr>`);
