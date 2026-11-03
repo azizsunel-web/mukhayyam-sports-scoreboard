@@ -16,7 +16,21 @@
 .hero-gallery-layer.active {
   opacity: 1;
 }
-</style></head><body><div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><div class="stats"><div class="stat"><div class="label">Students ranked</div><div id="studentCount" class="num">—</div><div class="muted">Participating students</div></div><div class="stat"><div class="label">Games recorded</div><div id="gameCount" class="num">—</div><div class="muted">Results entered by admin</div></div><div class="stat"><div class="label">Leading score</div><div id="topScore" class="num">—</div><div class="muted">Points earned so far</div></div></div><div class="tabs"><button class="tab active" data-view="students">Student Leaderboard</button><button class="tab" data-view="houses">House Standings</button><button class="tab" data-view="games">Game Results</button></div><section class="panel"><div id="notice" class="notice"></div><div class="panelhead"><div><h3 id="tableTitle">Student Leaderboard</h3><div class="muted">Only published sports results appear here.</div></div><input id="search" class="search" placeholder="Search student, house or game…"></div><div id="tableWrap"><div class="empty">Your live scoreboard will appear here once connected to Google Sheets.<br>Follow the included step-by-step guide.</div></div></section>
+
+.team-dashboard{margin:4px 0 22px}.team-dashboard-heading{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}.team-dashboard-heading h3{margin:0;font-size:15px;letter-spacing:1px}.team-dashboard-heading p{margin:5px 0 0}.team-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.team-card{appearance:none;border:0;border-radius:16px;padding:20px;text-align:left;color:#fff;min-height:132px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 5px 18px #29171918;transition:transform .18s ease,box-shadow .18s ease}.team-card:hover,.team-card:focus-visible{transform:translateY(-3px);box-shadow:0 9px 24px #29171925;outline:3px solid #d8b45a;outline-offset:2px}.team-card.red{background:linear-gradient(135deg,#a92732,#751a25)}.team-card.green{background:linear-gradient(135deg,#278052,#15583a)}.team-card.blue{background:linear-gradient(135deg,#3479c5,#17477f)}.team-card-name{font-size:22px;font-weight:900;letter-spacing:1px}.team-card-meta{font-size:13px;opacity:.94}.team-card-arrow{font-size:12px;font-weight:700;margin-top:4px}.team-detail{margin-top:16px;padding:0 18px 18px}.team-detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 2px}.team-detail-heading h3{margin:5px 0}.team-detail-heading p{margin:0}.team-close{border:1px solid var(--line);background:#fffdf9;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.team-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.team-member{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fffdf9;min-width:0}.team-member-name{font-weight:800;font-size:15px;margin-bottom:8px}.achievement-list{display:grid;gap:7px}.achievement{border-top:1px solid #eee5da;padding-top:8px;font-size:13px;line-height:1.5}.achievement strong{color:#641c25}.achievement-remarks{color:var(--muted);margin-top:2px}.team-no-achievements{display:none}.team-detail[hidden]{display:none!important}
+@media(max-width:650px){.team-cards{gap:8px}.team-card{padding:13px 10px;min-height:112px}.team-card-name{font-size:16px}.team-card-meta{font-size:11px}.team-card-arrow{font-size:11px}.team-members{grid-template-columns:1fr}.team-detail{padding:0 12px 14px}.team-detail-heading{align-items:flex-start}}
+</style></head><body><div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><section class="team-dashboard" aria-label="Team dashboard">
+  <div class="team-dashboard-heading"><div><h3>TEAM DASHBOARD</h3><p class="muted">Select a team to view its students and achievements.</p></div></div>
+  <div id="teamCards" class="team-cards">
+    <button class="team-card red" data-team="RED"><span class="team-card-name">RED TEAM</span><span class="team-card-meta">Loading team…</span><span class="team-card-arrow">View team →</span></button>
+    <button class="team-card green" data-team="GREEN"><span class="team-card-name">GREEN TEAM</span><span class="team-card-meta">Loading team…</span><span class="team-card-arrow">View team →</span></button>
+    <button class="team-card blue" data-team="BLUE"><span class="team-card-name">BLUE TEAM</span><span class="team-card-meta">Loading team…</span><span class="team-card-arrow">View team →</span></button>
+  </div>
+  <section id="teamDetail" class="team-detail panel" hidden>
+    <div class="team-detail-heading"><div><div id="teamDetailEyebrow" class="label">TEAM</div><h3 id="teamDetailTitle">Team members</h3><p id="teamDetailSummary" class="muted"></p></div><button id="closeTeamDetail" class="team-close" type="button">Close ✕</button></div>
+    <div id="teamMembers" class="team-members"></div>
+  </section>
+</section><div class="tabs"><button class="tab active" data-view="students">Student Leaderboard</button><button class="tab" data-view="houses">House Standings</button><button class="tab" data-view="games">Game Results</button></div><section class="panel"><div id="notice" class="notice"></div><div class="panelhead"><div><h3 id="tableTitle">Student Leaderboard</h3><div class="muted">Only published sports results appear here.</div></div><input id="search" class="search" placeholder="Search student, house or game…"></div><div id="tableWrap"><div class="empty">Your live scoreboard will appear here once connected to Google Sheets.<br>Follow the included step-by-step guide.</div></div></section>
 <!-- FAQ SECTION: prepared for future use. Keep FAQ_ENABLED=false until ready to publish. -->
 <section id="faqSection" class="panel faq-panel" hidden aria-hidden="true">
   <div class="panelhead">
@@ -28,7 +42,49 @@
   <div id="faqContent" class="faq-content"></div>
 </section>
 </main><footer class="foot"><b>MUKHAYYAM BANSWARA</b><br>Designed & Created by Aziz Sunelwala ©</footer><script>
-const API_URL="https://script.google.com/macros/s/AKfycbzycxGsb4h0m2V_gXgl8CB9n2MBcGjbYZdNWwAn0hZhYZQEmGgA5N93RuWY1s0FZWj6/exec";let data={students:[],houses:[],games:[]},view='students';const $=id=>document.getElementById(id);function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function medal(n){return n===1?'🥇':n===2?'🥈':n===3?'🥉':n}function render(){ $('studentCount').textContent=data.students.length;$('gameCount').textContent=data.games.length;$('topScore').textContent=data.students.length?Math.max(...data.students.map(s=>Number(s.points)||0)):'0';let q=$('search').value.trim().toLowerCase(),rows=[],heads=[],title='';if(view==='students'){title='Student Leaderboard';heads=['Rank','Student Name','House / Team','Total Points'];rows=data.students.filter(s=>(s.name+' '+s.house).toLowerCase().includes(q)).map((s,i)=>`<tr><td>${medal(Number(s.rank)||i+1)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`)}else if(view==='houses'){title='House Standings';heads=['Rank','House / Team','Students','Total Points'];rows=data.houses.filter(h=>h.name.toLowerCase().includes(q)).map((h,i)=>`<tr><td>${medal(Number(h.rank)||i+1)}</td><td class="name">${esc(h.name)}</td><td>${h.students}</td><td class="points">${Number(h.points)||0}</td></tr>`)}else{title='Game Results';heads=['Date','Game','Student','Position','Points','Remarks','Photos / Videos'];rows=data.games.filter(g=>(g.game+' '+g.student+' '+g.position+' '+(g.notes||'')).toLowerCase().includes(q)).map(g=>{const media=String(g.mediaUrl||'').trim();const safeMedia=/^https:\/\//i.test(media)?media:'';return `<tr><td>${esc(g.date||'—')}</td><td class="name">${esc(g.game)}</td><td>${esc(g.student)}</td><td>${esc(g.position||'—')}</td><td class="points">${Number(g.points)||0}</td><td>${esc(g.notes||'—')}</td><td>${safeMedia?`<a class="media-button" href="${esc(safeMedia)}" target="_blank" rel="noopener noreferrer">View Photos / Videos</a>`:'—'}</td></tr>`})}$('tableTitle').textContent=title;$('tableWrap').innerHTML=rows.length?`<div style="overflow-x:auto"><table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="empty">No results yet. Check back after the admin records scores.</div>'}function load(){if(!API_URL.startsWith('https://script.google.com/'))return;const cb='scoreboard_'+Date.now(),s=document.createElement('script');window[cb]=p=>{try{if(!p||!p.ok)throw Error();data=p.data;$('updated').textContent='Last refreshed: '+new Date().toLocaleTimeString();$('notice').style.display='none';render()}catch(e){$('notice').style.display='block';$('notice').textContent='Scores could not load. Please check the data connection.'}finally{delete window[cb];s.remove()}};s.onerror=()=>{$('notice').style.display='block';$('notice').textContent='Unable to load scores. Check the Google Sheet connection.';s.remove()};s.src=API_URL+(API_URL.includes('?')?'&':'?')+'callback='+cb+'&t='+Date.now();document.body.appendChild(s)}// FAQ feature is intentionally disabled. No FAQ tab is added to public navigation.
+const API_URL="https://script.google.com/macros/s/AKfycbzycxGsb4h0m2V_gXgl8CB9n2MBcGjbYZdNWwAn0hZhYZQEmGgA5N93RuWY1s0FZWj6/exec";let data={students:[],houses:[],games:[]},view='students';const $=id=>document.getElementById(id);function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function medal(n){return n===1?'🥇':n===2?'🥈':n===3?'🥉':n}function teamKey(value){return String(value||'').trim().toUpperCase()}
+function renderTeamDashboard(){
+  const teams=['RED','GREEN','BLUE'];
+  const cards=$('teamCards');
+  cards.innerHTML=teams.map(team=>{
+    const members=data.students.filter(student=>teamKey(student.house)===team);
+    const points=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
+    const cls=team.toLowerCase();
+    return `<button class="team-card ${cls}" type="button" data-team="${team}"><span class="team-card-name">${team} TEAM</span><span class="team-card-meta">${members.length} students · ${points} points</span><span class="team-card-arrow">View team →</span></button>`;
+  }).join('');
+  cards.querySelectorAll('[data-team]').forEach(button=>button.addEventListener('click',()=>showTeam(button.dataset.team)));
+}
+function showTeam(team){
+  const members=data.students.filter(student=>teamKey(student.house)===team).sort((a,b)=>a.name.localeCompare(b.name));
+  const total=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
+  $('teamDetailEyebrow').textContent=team+' TEAM';
+  $('teamDetailTitle').textContent=team+' Team Members';
+  $('teamDetailSummary').textContent=members.length+' students · '+total+' total points';
+  $('teamMembers').innerHTML=members.length?members.map(student=>{
+    const achievements=data.games.filter(game=>String(game.studentId||'')===String(student.id||'') || (!game.studentId && game.student===student.name && teamKey(game.house)===team));
+    const achievementHtml=achievements.length?`<div class="achievement-list">${achievements.map(game=>`<div class="achievement"><div><strong>${esc(game.game)}</strong> · ${esc(game.position)} · ${Number(game.points)||0} points</div>${game.notes?`<div class="achievement-remarks">Remarks: ${esc(game.notes)}</div>`:''}</div>`).join('')}</div>`:'';
+    return `<article class="team-member"><div class="team-member-name">${esc(student.name)}</div>${achievementHtml}</article>`;
+  }).join(''):'<div class="empty">No students are listed in this team yet.</div>';
+  $('teamDetail').hidden=false;
+  $('teamDetail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function render(){
+  renderTeamDashboard();
+  let q=$('search').value.trim().toLowerCase(),rows=[],heads=[],title='';
+  if(view==='students'){
+    title='Student Leaderboard';heads=['Rank','Student Name','House / Team','Total Points'];
+    rows=data.students.filter(s=>(s.name+' '+s.house).toLowerCase().includes(q)).map((s,i)=>`<tr><td>${medal(Number(s.rank)||i+1)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
+  }else if(view==='houses'){
+    title='House Standings';heads=['Rank','House / Team','Students','Total Points'];
+    rows=data.houses.filter(h=>h.name.toLowerCase().includes(q)).map((h,i)=>`<tr><td>${medal(Number(h.rank)||i+1)}</td><td class="name">${esc(h.name)}</td><td>${h.students}</td><td class="points">${Number(h.points)||0}</td></tr>`);
+  }else{
+    title='Game Results';heads=['Date','Game','Student','Position','Points','Remarks','Photos / Videos'];
+    rows=data.games.filter(g=>(g.game+' '+g.student+' '+g.position+' '+(g.notes||'')).toLowerCase().includes(q)).map(g=>{const media=String(g.mediaUrl||'').trim();const safeMedia=/^https:\/\//i.test(media)?media:'';return `<tr><td>${esc(g.date||'—')}</td><td class="name">${esc(g.game)}</td><td>${esc(g.student)}</td><td>${esc(g.position||'—')}</td><td class="points">${Number(g.points)||0}</td><td>${esc(g.notes||'—')}</td><td>${safeMedia?`<a class="media-button" href="${esc(safeMedia)}" target="_blank" rel="noopener noreferrer">View Photos / Videos</a>`:'—'}</td></tr>`});
+  }
+  $('tableTitle').textContent=title;
+  $('tableWrap').innerHTML=rows.length?`<div style="overflow-x:auto"><table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="empty">No results yet. Check back after the admin records scores.</div>';
+}
+function load(){if(!API_URL.startsWith('https://script.google.com/'))return;const cb='scoreboard_'+Date.now(),s=document.createElement('script');window[cb]=p=>{try{if(!p||!p.ok)throw Error();data=p.data;$('updated').textContent='Last refreshed: '+new Date().toLocaleTimeString();$('notice').style.display='none';render()}catch(e){$('notice').style.display='block';$('notice').textContent='Scores could not load. Please check the data connection.'}finally{delete window[cb];s.remove()}};s.onerror=()=>{$('notice').style.display='block';$('notice').textContent='Unable to load scores. Check the Google Sheet connection.';s.remove()};s.src=API_URL+(API_URL.includes('?')?'&':'?')+'callback='+cb+'&t='+Date.now();document.body.appendChild(s)}// FAQ feature is intentionally disabled. No FAQ tab is added to public navigation.
 const FAQ_ENABLED = false;
 const FAQ_ITEMS = [];
 if (FAQ_ENABLED) {
@@ -39,6 +95,7 @@ if (FAQ_ENABLED) {
     `<article class="faq-item"><h4>${esc(item.question)}</h4><p>${esc(item.answer)}</p></article>`
   ).join('') || '<div class="empty">FAQ content will be added soon.</div>';
 }
+$('closeTeamDetail').addEventListener('click',()=>$('teamDetail').hidden=true);
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
 
 // AUTOMATIC HERO GALLERY - LOOPING CINEMATIC TRANSITIONS
@@ -156,7 +213,7 @@ document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelect
 
     // Change photo every 10 seconds and repeat from the first photo forever.
     if (photos.length > 1) {
-      window.setInterval(showPhoto, 5000);
+      window.setInterval(showPhoto, 10000);
     }
 
   } catch (error) {
