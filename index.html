@@ -19,6 +19,17 @@
 
 .team-dashboard{margin:4px 0 22px}.team-dashboard-heading{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px}.team-dashboard-heading h3{margin:0;font-size:15px;letter-spacing:1px}.team-dashboard-heading p{margin:5px 0 0}.team-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.team-card{appearance:none;border:0;border-radius:16px;padding:20px;text-align:left;color:#fff;min-height:132px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;cursor:pointer;box-shadow:0 5px 18px #29171918;transition:transform .18s ease,box-shadow .18s ease}.team-card:hover,.team-card:focus-visible{transform:translateY(-3px);box-shadow:0 9px 24px #29171925;outline:3px solid #d8b45a;outline-offset:2px}.team-card.red{background:linear-gradient(135deg,#a92732,#751a25)}.team-card.green{background:linear-gradient(135deg,#278052,#15583a)}.team-card.blue{background:linear-gradient(135deg,#3479c5,#17477f)}.team-card-name{font-size:22px;font-weight:900;letter-spacing:1px}.team-card-meta{font-size:13px;opacity:.94}.team-card-arrow{font-size:12px;font-weight:700;margin-top:4px}.team-detail{margin-top:16px;padding:0 18px 18px}.team-detail-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 2px}.team-detail-heading h3{margin:5px 0}.team-detail-heading p{margin:0}.team-close{border:1px solid var(--line);background:#fffdf9;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700;color:var(--ink)}.team-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.team-member{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fffdf9;min-width:0}.team-member-name{font-weight:800;font-size:15px;margin-bottom:8px}.achievement-list{display:grid;gap:7px}.achievement{border-top:1px solid #eee5da;padding-top:8px;font-size:13px;line-height:1.5}.achievement strong{color:#641c25}.achievement-remarks{color:var(--muted);margin-top:2px}.team-no-achievements{display:none}.team-detail[hidden]{display:none!important}
 @media(max-width:650px){.team-cards{gap:8px}.team-card{padding:13px 10px;min-height:112px}.team-card-name{font-size:16px}.team-card-meta{font-size:11px}.team-card-arrow{font-size:11px}.team-members{grid-template-columns:1fr}.team-detail{padding:0 12px 14px}.team-detail-heading{align-items:flex-start}}
+
+/* Team roster: highlight students with points; keep non-scorers visually quiet at the end. */
+.team-member-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.team-member-scored{background:linear-gradient(135deg,#fffdf7,#fff4d9);border:1px solid #e5bd59;box-shadow:0 3px 12px #b98b281c}
+.team-member-scored .team-member-name{color:#552b12}
+.student-points-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;background:#f3d77d;color:#573b08;font-size:12px;font-weight:900;white-space:nowrap}
+.team-member-no-score{background:#fffdf9;border-color:#eee7de}
+.team-member-no-score .team-member-name{color:#756c69}
+.team-member-scored .achievement{border-color:#ead9a9}
+.team-member-scored .achievement strong{color:#8a5410}
+
 </style></head><body><div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><section class="team-dashboard" aria-label="Team dashboard">
   <div class="team-dashboard-heading"><div><h3>TEAM DASHBOARD</h3><p class="muted">Select a team to view its students and achievements.</p></div></div>
   <div id="teamCards" class="team-cards">
@@ -55,15 +66,31 @@ function renderTeamDashboard(){
   cards.querySelectorAll('[data-team]').forEach(button=>button.addEventListener('click',()=>showTeam(button.dataset.team)));
 }
 function showTeam(team){
-  const members=data.students.filter(student=>teamKey(student.house)===team).sort((a,b)=>a.name.localeCompare(b.name));
+  // Hide placeholder team-name records from this roster only; keep tournament data untouched.
+  const members=data.students.filter(student=>
+    teamKey(student.house)===team && !['RED','GREEN','BLUE'].includes(teamKey(student.name))
+  ).sort((a,b)=>{
+    const ap=Number(a.points)||0, bp=Number(b.points)||0;
+    const aScored=ap>0, bScored=bp>0;
+    if(aScored!==bScored) return aScored?-1:1;
+    if(bp!==ap) return bp-ap;
+    return String(a.name||'').localeCompare(String(b.name||''));
+  });
   const total=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
   $('teamDetailEyebrow').textContent=team+' TEAM';
   $('teamDetailTitle').textContent=team+' Team Members';
   $('teamDetailSummary').textContent=members.length+' students · '+total+' total points';
   $('teamMembers').innerHTML=members.length?members.map(student=>{
-    const achievements=data.games.filter(game=>String(game.studentId||'')===String(student.id||'') || (!game.studentId && game.student===student.name && teamKey(game.house)===team));
-    const achievementHtml=achievements.length?`<div class="achievement-list">${achievements.map(game=>`<div class="achievement"><div><strong>${esc(game.game)}</strong> · ${esc(game.position)} · ${Number(game.points)||0} points</div>${game.notes?`<div class="achievement-remarks">Remarks: ${esc(game.notes)}</div>`:''}</div>`).join('')}</div>`:'';
-    return `<article class="team-member"><div class="team-member-name">${esc(student.name)}</div>${achievementHtml}</article>`;
+    const normName=value=>String(value||'').trim().replace(/\s+/g,' ').toLowerCase();
+    const achievements=data.games.filter(game=>
+      (game.studentId && String(game.studentId).trim()===String(student.id||'').trim()) ||
+      normName(game.student)===normName(student.name)
+    ).filter(game=>(Number(game.points)||0)>0)
+     .sort((a,b)=>(Number(b.points)||0)-(Number(a.points)||0));
+    const points=Number(student.points)||0;
+    const scored=points>0;
+    const achievementHtml=achievements.length?`<div class="achievement-list">${achievements.map(game=>`<div class="achievement"><div><strong>${esc(game.game)}</strong></div><div>Position: <strong>${esc(game.position||'—')}</strong> &nbsp;·&nbsp; Points: <strong>${Number(game.points)||0}</strong></div>${game.notes?`<div class="achievement-remarks">Remarks: ${esc(game.notes)}</div>`:''}</div>`).join('')}</div>`:'';
+    return `<article class="team-member ${scored?'team-member-scored':'team-member-no-score'}"><div class="team-member-top"><div class="team-member-name">${esc(student.name)}</div>${scored?`<span class="student-points-badge">${points} points</span>`:''}</div>${achievementHtml}</article>`;
   }).join(''):'<div class="empty">No students are listed in this team yet.</div>';
   $('teamDetail').hidden=false;
   $('teamDetail').scrollIntoView({behavior:'smooth',block:'nearest'});
