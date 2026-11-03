@@ -58,7 +58,10 @@ function renderTeamDashboard(){
   const teams=['RED','GREEN','BLUE'];
   const cards=$('teamCards');
   cards.innerHTML=teams.map(team=>{
-    const members=data.students.filter(student=>teamKey(student.house)===team);
+    // Exclude placeholder records named RED/GREEN/BLUE from team cards and totals.
+    const members=data.students.filter(student=>
+      teamKey(student.house)===team && !['RED','GREEN','BLUE'].includes(teamKey(student.name))
+    );
     const points=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
     const cls=team.toLowerCase();
     return `<button class="team-card ${cls}" type="button" data-team="${team}"><span class="team-card-name">${team} TEAM</span><span class="team-card-meta">${members.length} students · ${points} points</span><span class="team-card-arrow">View team →</span></button>`;
