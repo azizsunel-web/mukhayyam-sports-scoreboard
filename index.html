@@ -30,6 +30,39 @@
 .team-member-scored .achievement{border-color:#ead9a9}
 .team-member-scored .achievement strong{color:#8a5410}
 
+
+/* TEAM RANKING EMPHASIS */
+.team-cards{align-items:stretch}
+.team-card{position:relative;min-height:150px;padding:20px 22px;gap:9px}
+.team-card-name{font-size:21px}
+.team-card-meta{display:none!important}
+.team-card-score{font-size:clamp(30px,4vw,44px);font-weight:900;line-height:1.05;letter-spacing:-1px;text-shadow:0 2px 12px #0002}
+.team-card-rank{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;opacity:.95}
+.team-card.rank-1{outline:3px solid #e5bd59;box-shadow:0 10px 28px #a7792540;transform:translateY(-5px);filter:brightness(1.16) saturate(1.12)}
+.team-card.rank-1 .team-card-score{font-size:clamp(40px,5vw,56px);color:#fff9d9;text-shadow:0 2px 18px #fff7}
+.team-card.rank-2{box-shadow:0 7px 22px #4b556333}
+.team-card.rank-3{filter:saturate(.88) brightness(.96)}
+.team-card.tie-rank{outline:2px solid #ffffff66}
+/* DAILY PHOTO & VIDEO HIGHLIGHTS */
+.highlights-section{margin:24px 0 26px}
+.highlights-heading{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:14px}
+.highlights-heading h3{margin:0;font-size:22px}
+.highlights-heading p{margin:5px 0 0}
+.highlights-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.highlight-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#fff;box-shadow:0 5px 18px #2917190d;min-width:0}
+.highlight-card img,.highlight-card video{display:block;width:100%;height:230px;object-fit:cover;background:#211719}
+.highlight-card img{cursor:zoom-in;transition:transform .35s ease}
+.highlight-card:hover img{transform:scale(1.035)}
+.highlight-caption{padding:11px 13px;font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.highlight-video-label{position:absolute;top:12px;left:12px;background:#351015d9;color:#fff;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:800;pointer-events:none}
+.highlights-empty{padding:30px 18px;text-align:center;background:#fffdf9;border:1px dashed #d9cabb;border-radius:15px;color:var(--muted);line-height:1.6}
+.photo-lightbox{position:fixed;inset:0;background:#12090beF;z-index:9999;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.photo-lightbox.open{display:flex}
+.photo-lightbox img{max-width:min(94vw,1400px);max-height:90vh;object-fit:contain;border-radius:8px}
+.photo-lightbox button{position:absolute;top:18px;right:22px;border:1px solid #ffffff66;background:#351015;color:white;border-radius:50%;width:42px;height:42px;font-size:24px;cursor:pointer}
+@media(max-width:800px){.highlights-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.highlight-card img,.highlight-card video{height:190px}}
+@media(max-width:600px){.team-card{min-height:125px;padding:14px 11px}.team-card-name{font-size:15px}.team-card-rank{font-size:9px}.team-card-score{font-size:29px}.team-card.rank-1 .team-card-score{font-size:36px}.highlights-grid{grid-template-columns:1fr}.highlight-card img,.highlight-card video{height:230px}.highlights-heading{align-items:flex-start;flex-direction:column}}
+
 </style></head><body><div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><section class="team-dashboard" aria-label="Team dashboard">
   <div class="team-dashboard-heading"><div><h3>TEAM DASHBOARD</h3><p class="muted">Select a team to view its students and achievements.</p></div></div>
   <div id="teamCards" class="team-cards">
@@ -41,7 +74,12 @@
     <div class="team-detail-heading"><div><div id="teamDetailEyebrow" class="label">TEAM</div><h3 id="teamDetailTitle">Team members</h3><p id="teamDetailSummary" class="muted"></p></div><button id="closeTeamDetail" class="team-close" type="button">Close ✕</button></div>
     <div id="teamMembers" class="team-members"></div>
   </section>
-</section><div class="tabs"><button class="tab active" data-view="students">Student Leaderboard</button><button class="tab" data-view="houses">House Standings</button><button class="tab" data-view="games">Game Results</button></div><section class="panel"><div id="notice" class="notice"></div><div class="panelhead"><div><h3 id="tableTitle">Student Leaderboard</h3><div class="muted">Only published sports results appear here.</div></div><input id="search" class="search" placeholder="Search student, house or game…"></div><div id="tableWrap"><div class="empty">Your live scoreboard will appear here once connected to Google Sheets.<br>Follow the included step-by-step guide.</div></div></section>
+</section>
+<section class="highlights-section" aria-label="Photo and video highlights">
+  <div class="highlights-heading"><div><h3>📸 Mukhayyam Highlights</h3><p class="muted">Photos and videos from our latest sports activities.</p></div><div class="muted" id="highlightsCount">Loading highlights…</div></div>
+  <div id="highlightsGrid" class="highlights-grid"><div class="highlights-empty">Loading photos and videos…</div></div>
+</section>
+<div class="tabs"><button class="tab active" data-view="students">Student Leaderboard</button><button class="tab" data-view="houses">House Standings</button><button class="tab" data-view="games">Game Results</button></div><section class="panel"><div id="notice" class="notice"></div><div class="panelhead"><div><h3 id="tableTitle">Student Leaderboard</h3><div class="muted">Only published sports results appear here.</div></div><input id="search" class="search" placeholder="Search student, house or game…"></div><div id="tableWrap"><div class="empty">Your live scoreboard will appear here once connected to Google Sheets.<br>Follow the included step-by-step guide.</div></div></section>
 <!-- FAQ SECTION: prepared for future use. Keep FAQ_ENABLED=false until ready to publish. -->
 <section id="faqSection" class="panel faq-panel" hidden aria-hidden="true">
   <div class="panelhead">
@@ -52,19 +90,24 @@
   </div>
   <div id="faqContent" class="faq-content"></div>
 </section>
-</main><footer class="foot"><b>MUKHAYYAM BANSWARA</b><br>Designed & Created by Aziz Sunelwala ©</footer><script>
+</main><div id="photoLightbox" class="photo-lightbox" role="dialog" aria-modal="true" aria-label="Photo preview"><button type="button" id="closePhotoLightbox" aria-label="Close photo">×</button><img id="lightboxImage" alt="Mukhayyam sports highlight"></div><footer class="foot"><b>MUKHAYYAM BANSWARA</b><br>Designed & Created by Aziz Sunelwala ©</footer><script>
 const API_URL="https://script.google.com/macros/s/AKfycbzycxGsb4h0m2V_gXgl8CB9n2MBcGjbYZdNWwAn0hZhYZQEmGgA5N93RuWY1s0FZWj6/exec";let data={students:[],houses:[],games:[]},view='students';const $=id=>document.getElementById(id);function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function medal(n){return n===1?'🥇':n===2?'🥈':n===3?'🥉':n}function teamKey(value){return String(value||'').trim().toUpperCase()}
 function renderTeamDashboard(){
   const teams=['RED','GREEN','BLUE'];
   const cards=$('teamCards');
-  cards.innerHTML=teams.map(team=>{
-    // Exclude placeholder records named RED/GREEN/BLUE from team cards and totals.
+  const ranked=teams.map((team,originalIndex)=>{
     const members=data.students.filter(student=>
       teamKey(student.house)===team && !['RED','GREEN','BLUE'].includes(teamKey(student.name))
     );
     const points=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
-    const cls=team.toLowerCase();
-    return `<button class="team-card ${cls}" type="button" data-team="${team}"><span class="team-card-name">${team} TEAM</span><span class="team-card-meta">${members.length} students · ${points} points</span><span class="team-card-arrow">View team →</span></button>`;
+    return {team,points,originalIndex};
+  }).sort((a,b)=>b.points-a.points || a.originalIndex-b.originalIndex);
+  cards.innerHTML=ranked.map((item,index)=>{
+    const cls=item.team.toLowerCase();
+    const rank=index+1;
+    const rankLabel=rank===1?'1ST PLACE':rank===2?'2ND PLACE':'3RD PLACE';
+    const tie=rank>1 && item.points===ranked[index-1].points?' tie-rank':'';
+    return `<button class="team-card ${cls} rank-${rank}${tie}" type="button" data-team="${item.team}" aria-label="${item.team} team, ${item.points} points, ${rankLabel}"><span class="team-card-rank">${rankLabel}</span><span class="team-card-name">${item.team} TEAM</span><span class="team-card-score">${item.points} <small style="font-size:.42em;letter-spacing:0">POINTS</small></span><span class="team-card-arrow">View team →</span></button>`;
   }).join('');
   cards.querySelectorAll('[data-team]').forEach(button=>button.addEventListener('click',()=>showTeam(button.dataset.team)));
 }
@@ -103,7 +146,7 @@ function render(){
   let q=$('search').value.trim().toLowerCase(),rows=[],heads=[],title='';
   if(view==='students'){
     title='Student Leaderboard';heads=['Rank','Student Name','House / Team','Total Points'];
-    rows=data.students.filter(s=>(s.name+' '+s.house).toLowerCase().includes(q)).map((s,i)=>`<tr><td>${medal(Number(s.rank)||i+1)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
+    rows=data.students.filter(s=>!['RED','GREEN','BLUE'].includes(teamKey(s.name)) && (s.name+' '+s.house).toLowerCase().includes(q)).map((s,i)=>`<tr><td>${medal(Number(s.rank)||i+1)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
   }else if(view==='houses'){
     title='House Standings';heads=['Rank','House / Team','Students','Total Points'];
     rows=data.houses.filter(h=>h.name.toLowerCase().includes(q)).map((h,i)=>`<tr><td>${medal(Number(h.rank)||i+1)}</td><td class="name">${esc(h.name)}</td><td>${h.students}</td><td class="points">${Number(h.points)||0}</td></tr>`);
@@ -127,6 +170,44 @@ if (FAQ_ENABLED) {
 }
 $('closeTeamDetail').addEventListener('click',()=>$('teamDetail').hidden=true);
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
+
+// DAILY HIGHLIGHTS GALLERY: upload image/video files to /highlights in the GitHub repository.
+(async function loadHighlightsGallery(){
+  const grid=$('highlightsGrid');
+  const count=$('highlightsCount');
+  const endpoint='https://api.github.com/repos/azizsunel-web/mukhayyam-sports-scoreboard/contents/highlights?ref=main';
+  if(!grid) return;
+  try{
+    const response=await fetch(endpoint,{cache:'no-store'});
+    if(!response.ok) throw new Error('GitHub highlights folder not found');
+    const files=await response.json();
+    const media=files.filter(file=>file.type==='file' && /\.(jpe?g|png|webp|gif|mp4|webm|ogg)$/i.test(file.name))
+      .sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}));
+    if(!media.length){
+      grid.innerHTML='<div class="highlights-empty" style="grid-column:1/-1">No highlights uploaded yet. Add photos or videos to the GitHub <strong>highlights</strong> folder and they will appear here.</div>';
+      count.textContent='0 highlights'; return;
+    }
+    count.textContent=media.length+' highlights';
+    grid.innerHTML=media.map(file=>{
+      const url=file.download_url;
+      const safeName=esc(file.name.replace(/\.[^.]+$/,''));
+      const isVideo=/\.(mp4|webm|ogg)$/i.test(file.name);
+      if(isVideo) return `<article class="highlight-card"><span class="highlight-video-label">▶ VIDEO</span><video controls preload="metadata" playsinline src="${esc(url)}">Your browser does not support this video.</video><div class="highlight-caption">${safeName}</div></article>`;
+      return `<article class="highlight-card"><img src="${esc(url)}" alt="${safeName}" loading="lazy" data-full="${esc(url)}"><div class="highlight-caption">${safeName}</div></article>`;
+    }).join('');
+    grid.querySelectorAll('img[data-full]').forEach(img=>img.addEventListener('click',()=>{
+      $('lightboxImage').src=img.dataset.full;
+      $('photoLightbox').classList.add('open');
+    }));
+  }catch(error){
+    console.error('Highlights gallery error:',error);
+    grid.innerHTML='<div class="highlights-empty" style="grid-column:1/-1">Highlights gallery is not connected yet. Create the GitHub folder named <strong>highlights</strong> and upload your media files.</div>';
+    count.textContent='';
+  }
+})();
+$('closePhotoLightbox').addEventListener('click',()=>$('photoLightbox').classList.remove('open'));
+$('photoLightbox').addEventListener('click',event=>{if(event.target===$('photoLightbox')) $('photoLightbox').classList.remove('open')});
+document.addEventListener('keydown',event=>{if(event.key==='Escape') $('photoLightbox').classList.remove('open')});
 
 // AUTOMATIC HERO GALLERY - LOOPING CINEMATIC TRANSITIONS
 (async function () {
