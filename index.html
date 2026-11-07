@@ -63,16 +63,32 @@
 @media(max-width:800px){.highlights-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.highlight-card img,.highlight-card video{height:190px}}
 @media(max-width:600px){.team-card{min-height:125px;padding:14px 11px}.team-card-name{font-size:15px}.team-card-rank{font-size:9px}.team-card-score{font-size:29px}.team-card.rank-1 .team-card-score{font-size:36px}.highlights-grid{grid-template-columns:1fr}.highlight-card img,.highlight-card video{height:230px}.highlights-heading{align-items:flex-start;flex-direction:column}}
 
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FRKHH2S5B4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FRKHH2S5B4');
-</script>
 
-</style></head><body><div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><section class="team-dashboard" aria-label="Team dashboard">
+/* Parent visitor registration */
+.visitor-gate[hidden]{display:none!important}
+.visitor-gate{position:fixed;inset:0;z-index:20000;background:rgba(25,12,14,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.visitor-card{width:min(100%,420px);background:#fffdf9;border-radius:20px;padding:26px;box-shadow:0 20px 70px #0005;color:#351015}
+.visitor-card h2{margin:0 0 8px;font-size:24px}.visitor-card p{color:#75666a;line-height:1.5;font-size:14px;margin:0 0 18px}
+.visitor-card label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
+.visitor-card input{width:100%;box-sizing:border-box;border:1px solid #d9cfc8;border-radius:10px;padding:12px;font:inherit;background:white;color:#241b1d}
+.visitor-card button{width:100%;border:0;border-radius:11px;background:#351015;color:white;font-weight:800;padding:13px;margin-top:18px;font:inherit;cursor:pointer}
+.visitor-card button:disabled{opacity:.55;cursor:wait}.visitor-error{color:#a32020!important;min-height:18px;margin-top:10px!important}
+
+</style></head><body>
+<div id="visitorGate" class="visitor-gate" hidden>
+  <form id="visitorForm" class="visitor-card" autocomplete="on">
+    <h2>Welcome to Mukhayyam</h2>
+    <p>Please enter your name and your child's name once. This helps us understand how often families visit the sports scoreboard.</p>
+    <label for="parentName">Parent Name</label>
+    <input id="parentName" name="parentName" type="text" maxlength="80" autocomplete="name" required>
+    <label for="studentName">Student Name</label>
+    <input id="studentName" name="studentName" type="text" maxlength="80" required>
+    <button id="visitorSubmit" type="submit">Continue to Website</button>
+    <p id="visitorError" class="visitor-error" aria-live="polite"></p>
+  </form>
+</div>
+<iframe name="visitorLoggerFrame" id="visitorLoggerFrame" title="Visitor logger" style="display:none"></iframe>
+<div class="top">MUKHAYYAM BANSWARA &nbsp; • &nbsp; STUDENT SPORTS & ACTIVITIES</div><div class="nav"><div class="brand"><img class="brand-logo" src="assets/mukhayyam-logo.jpg" alt="Mukhayyam Banswara logo"><span class="brand-copy">MUKHAYYAM BANSWARA<small>ANNUAL SPORTS SCOREBOARD</small></span></div><div class="tag">OFFICIAL SCOREBOARD</div></div><header class="hero" style="background-image: linear-gradient(90deg, rgba(53,16,21,0.82), rgba(53,16,21,0.25)), url('./assets/sports-hero.png'); background-position: center 55%; background-size: cover; background-repeat: no-repeat;"><div><div class="eyebrow">THE GAMES • THE SPIRIT • THE RESULTS</div><h1>ANNUAL<br>SPORTS 2026</h1><p>Every effort counts. Follow student achievements, team standings and game results.</p></div><div class="trophy">🏆</div></header><main><div class="intro"><div><div class="eyebrow" style="color:#8b6536">MUKHAYYAM BANSWARA</div><h2>Live Leaderboard</h2><p>Student rankings, house standings and game-wise results.</p></div><div id="updated" class="muted">Scoreboard setup pending</div></div><section class="team-dashboard" aria-label="Team dashboard">
   <div class="team-dashboard-heading"><div><h3>TEAM DASHBOARD</h3><p class="muted">Select a team to view its students and achievements.</p></div></div>
   <div id="teamCards" class="team-cards">
     <button class="team-card red" data-team="RED"><span class="team-card-name">RED TEAM</span><span class="team-card-meta">Loading team…</span><span class="team-card-arrow">View team →</span></button>
@@ -85,7 +101,7 @@
   </section>
 </section>
 <section class="highlights-section" aria-label="Photo and video highlights">
-  <div class="highlights-heading"><div><h3>📸 Sports Highlights 1448H</h3><p class="muted">Photos and videos from our latest sports activities.</p></div><div class="muted" id="highlightsCount">Loading highlights…</div></div>
+  <div class="highlights-heading"><div><h3>📸 Mukhayyam Highlights</h3><p class="muted">Photos and videos from our latest sports activities.</p></div><div class="muted" id="highlightsCount">Loading highlights…</div></div>
   <div id="highlightsGrid" class="highlights-grid"><div class="highlights-empty">Loading photos and videos…</div></div>
 </section>
 <div class="tabs"><button class="tab active" data-view="students">Student Leaderboard</button><button class="tab" data-view="houses">House Standings</button><button class="tab" data-view="games">Game Results</button></div><section class="panel"><div id="notice" class="notice"></div><div class="panelhead"><div><h3 id="tableTitle">Student Leaderboard</h3><div class="muted">Only published sports results appear here.</div></div><input id="search" class="search" placeholder="Search student, house or game…"></div><div id="tableWrap"><div class="empty">Your live scoreboard will appear here once connected to Google Sheets.<br>Follow the included step-by-step guide.</div></div></section>
@@ -171,6 +187,54 @@ function render(){
   $('tableTitle').textContent=title;
   $('tableWrap').innerHTML=rows.length?`<div style="overflow-x:auto"><table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`:'<div class="empty">No results yet. Check back after the admin records scores.</div>';
 }
+
+// Parent visitor register: first visit asks for details; later visits reuse this browser's saved profile.
+const VISITOR_PROFILE_KEY = 'mukhayyam_parent_profile_v1';
+const VISITOR_LOG_ENDPOINT = API_URL;
+function makeVisitorId(){
+  if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  return 'V' + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
+}
+function sendVisitorLog(profile, eventType){
+  const form = document.createElement('form');
+  form.method = 'POST'; form.action = VISITOR_LOG_ENDPOINT;
+  form.target = 'visitorLoggerFrame'; form.style.display = 'none';
+  const values = {action:'logVisit',visitorId:profile.visitorId,parentName:profile.parentName,
+    studentName:profile.studentName,eventType:eventType,pageUrl:location.href};
+  Object.keys(values).forEach(function(key){
+    const input = document.createElement('input');
+    input.type='hidden'; input.name=key; input.value=values[key] || '';
+    form.appendChild(input);
+  });
+  document.body.appendChild(form); form.submit(); form.remove();
+}
+function startVisitorRegister(){
+  const gate = document.getElementById('visitorGate');
+  const form = document.getElementById('visitorForm');
+  let profile = null;
+  try { profile = JSON.parse(localStorage.getItem(VISITOR_PROFILE_KEY) || 'null'); } catch(e) {}
+  if (profile && profile.visitorId && profile.parentName && profile.studentName) {
+    sendVisitorLog(profile, 'Repeat Visit');
+    gate.hidden = true;
+    return;
+  }
+  gate.hidden = false;
+  form.addEventListener('submit', function(event){
+    event.preventDefault();
+    const parentName=document.getElementById('parentName').value.trim();
+    const studentName=document.getElementById('studentName').value.trim();
+    const error=document.getElementById('visitorError');
+    if(!parentName || !studentName){error.textContent='Please fill in both names.';return;}
+    const button=document.getElementById('visitorSubmit');
+    button.disabled=true;button.textContent='Please wait…';
+    profile={visitorId:makeVisitorId(),parentName:parentName,studentName:studentName};
+    try{localStorage.setItem(VISITOR_PROFILE_KEY,JSON.stringify(profile));}
+    catch(e){error.textContent='Browser storage is blocked. Please enable site storage and try again.';button.disabled=false;button.textContent='Continue to Website';return;}
+    sendVisitorLog(profile,'First Visit');
+    gate.hidden=true;
+  },{once:true});
+}
+
 function load(){if(!API_URL.startsWith('https://script.google.com/'))return;const cb='scoreboard_'+Date.now(),s=document.createElement('script');window[cb]=p=>{try{if(!p||!p.ok)throw Error();data=p.data;$('updated').textContent='Last refreshed: '+new Date().toLocaleTimeString();$('notice').style.display='none';render()}catch(e){$('notice').style.display='block';$('notice').textContent='Scores could not load. Please check the data connection.'}finally{delete window[cb];s.remove()}};s.onerror=()=>{$('notice').style.display='block';$('notice').textContent='Unable to load scores. Check the Google Sheet connection.';s.remove()};s.src=API_URL+(API_URL.includes('?')?'&':'?')+'callback='+cb+'&t='+Date.now();document.body.appendChild(s)}// FAQ feature is intentionally disabled. No FAQ tab is added to public navigation.
 const FAQ_ENABLED = false;
 const FAQ_ITEMS = [];
@@ -183,7 +247,7 @@ if (FAQ_ENABLED) {
   ).join('') || '<div class="empty">FAQ content will be added soon.</div>';
 }
 $('closeTeamDetail').addEventListener('click',()=>$('teamDetail').hidden=true);
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);load();setInterval(load,60000);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.view;render()});$('search').addEventListener('input',render);startVisitorRegister();load();setInterval(load,60000);
 
 // DAILY HIGHLIGHTS GALLERY: upload image/video files to /highlights in the GitHub repository.
 (async function loadHighlightsGallery(){
