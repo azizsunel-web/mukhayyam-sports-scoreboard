@@ -117,16 +117,19 @@
 </section>
 </main><div id="photoLightbox" class="photo-lightbox" role="dialog" aria-modal="true" aria-label="Photo preview"><button type="button" id="closePhotoLightbox" aria-label="Close photo">×</button><img id="lightboxImage" alt="Mukhayyam sports highlight"></div><footer class="foot"><b>MUKHAYYAM BANSWARA</b><br>Designed & Created by Aziz Sunelwala ©</footer><script>
 const API_URL="https://script.google.com/macros/s/AKfycbzycxGsb4h0m2V_gXgl8CB9n2MBcGjbYZdNWwAn0hZhYZQEmGgA5N93RuWY1s0FZWj6/exec";let data={students:[],houses:[],games:[]},view='students';const $=id=>document.getElementById(id);function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function medal(n){return n===1?'🥇':n===2?'🥈':n===3?'🥉':n}function teamKey(value){return String(value||'').trim().toUpperCase()}
-function renderTeamDashboard(){
+function getTeamStandings(){
   const teams=['RED','GREEN','BLUE'];
-  const cards=$('teamCards');
-  const ranked=teams.map((team,originalIndex)=>{
+  return teams.map((team,originalIndex)=>{
     const members=data.students.filter(student=>
       teamKey(student.house)===team && !['RED','GREEN','BLUE'].includes(teamKey(student.name))
     );
     const points=members.reduce((sum,student)=>sum+(Number(student.points)||0),0);
-    return {team,points,originalIndex};
+    return {team,points,students:members.length,originalIndex};
   }).sort((a,b)=>b.points-a.points || a.originalIndex-b.originalIndex);
+}
+function renderTeamDashboard(){
+  const cards=$('teamCards');
+  const ranked=getTeamStandings();
   cards.innerHTML=ranked.map((item,index)=>{
     const cls=item.team.toLowerCase();
     const rank=index+1;
@@ -179,7 +182,9 @@ function render(){
       .map(s=>`<tr><td>${medal(s.displayRank)}</td><td class="name">${esc(s.name)}</td><td><span class="pill">${esc(s.house||'—')}</span></td><td class="points">${Number(s.points)||0}</td></tr>`);
   }else if(view==='houses'){
     title='House Standings';heads=['Rank','House / Team','Students','Total Points'];
-    rows=data.houses.filter(h=>h.name.toLowerCase().includes(q)).map((h,i)=>`<tr><td>${medal(Number(h.rank)||i+1)}</td><td class="name">${esc(h.name)}</td><td>${h.students}</td><td class="points">${Number(h.points)||0}</td></tr>`);
+    rows=getTeamStandings()
+      .filter(team=>team.team.toLowerCase().includes(q))
+      .map((team,index)=>`<tr><td>${medal(index+1)}</td><td class="name">${esc(team.team)}</td><td>${team.students}</td><td class="points">${team.points}</td></tr>`);
   }else{
     title='Game Results';heads=['Date','Game','Student','Position','Points','Remarks','Photos / Videos'];
     rows=data.games.filter(g=>(g.game+' '+g.student+' '+g.position+' '+(g.notes||'')).toLowerCase().includes(q)).map(g=>{const media=String(g.mediaUrl||'').trim();const safeMedia=/^https:\/\//i.test(media)?media:'';return `<tr><td>${esc(g.date||'—')}</td><td class="name">${esc(g.game)}</td><td>${esc(g.student)}</td><td>${esc(g.position||'—')}</td><td class="points">${Number(g.points)||0}</td><td>${esc(g.notes||'—')}</td><td>${safeMedia?`<a class="media-button" href="${esc(safeMedia)}" target="_blank" rel="noopener noreferrer">View Photos / Videos</a>`:'—'}</td></tr>`});
